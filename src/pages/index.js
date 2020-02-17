@@ -1,16 +1,17 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './index.css';
+import { Row, Col } from 'antd';
 import { Button, Progress, TimePicker } from 'antd';
 import { useState } from "react";
 import { useInterval } from "../utilities/hooks";
 import moment from 'moment';
+import './index.css';
 
 const STATE_INIT = "initial";
 const STATE_RUN = "run";
 const STATE_PAUSE = "pause";
 
-const INTERVAL = 500; // update interval (500 msec)
+const INTERVAL = 100; // update interval (500 msec)
 
 // Convert moment.duration to ms
 function totalMS(d) {
@@ -96,13 +97,6 @@ function Timer(props) {
     const now = Date.now();
     setRemaining(Math.max(0, end - now));
 
-    console.log("tick ");
-    console.log("now: ", now);
-    console.log("remaining: ", remaining);
-    console.log("start: ", start);
-    console.log("end: ", end);
-    console.log("duration: ", duration);
-
     // on update remaining time
     /*
       this.tickWarn(remaining);
@@ -125,10 +119,9 @@ function Timer(props) {
   console.log('duration:', duration);
 
   return (
-    <div>
-      <h1>Timer</h1>
-
-      <div>
+    <div>  
+      <Row type="flex" justify="center" gutter={[24, 24]}>
+        <Col span={24}>
           {/* defaultValue={moment('00:05:00', 'HH:mm:ss')} */}
           <TimePicker
             defaultValue={durationMoment}
@@ -137,37 +130,44 @@ function Timer(props) {
             secondStep={10}
             disabled={timerState !== STATE_INIT}
           />
-      </div>
+        </Col>
+      </Row>
 
-      <div>
-        <Progress
-          type="circle"
-          percent={percentRemaining}
-          format={() => progressText()}
-        />
-      </div>
+      <Row type="flex" justify="center" gutter={[24, 24]}>
+        <Col span={24}>
+          <Progress
+            type="circle"
+            percent={percentRemaining}
+            format={() => progressText()}
+            width={200}
+          />
+          </Col>
+      </Row>
 
-      <div className="TimerControls">
-        <Button className="TimerButton" onClick={onCancel}>
-          Reset
-        </Button>
-
-        {timerState === STATE_INIT && (
-          <Button className="TimerButton" onClick={onStart}>
-            Start
+      <Row type="flex" justify="center" gutter={[16, 16]} >
+        <Col span={12}>
+          <Button className="TimerButton" onClick={onCancel} size="large">
+            Reset
           </Button>
-        )}
-        {timerState === STATE_RUN && (
-          <Button className="TimerButton" onClick={onPause}>
-            Pause
-          </Button>
-        )}
-        {timerState === STATE_PAUSE && (
-          <Button className="TimerButton" onClick={onResume}>
-            Resume
-          </Button>
-        )}
-      </div>
+        </Col>
+        <Col span={12}>
+          {timerState === STATE_INIT && (
+            <Button className="TimerButton" onClick={onStart} size="large">
+              Start
+            </Button>
+          )}
+          {timerState === STATE_RUN && (
+            <Button className="TimerButton" onClick={onPause} size="large">
+              Pause
+            </Button>
+          )}
+          {timerState === STATE_PAUSE && (
+            <Button className="TimerButton" onClick={onResume} size="large">
+              Resume
+            </Button>
+          )}
+        </Col>
+      </Row>
     </div>
   );
 }
