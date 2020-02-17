@@ -11,9 +11,10 @@ const STATE_INIT = "initial";
 const STATE_RUN = "run";
 const STATE_PAUSE = "pause";
 
-const INTERVAL = 100; // update interval (500 msec)
+const UPDATE_INTERVAL = 500;      // update interval (500 msec)
+const DEFAULT_DURATION = 60000;
 
-// Convert moment.duration to ms
+// Convert moment.duration to milliseconds
 function totalMS(d) {
   return (
     ((d.hours() * 60
@@ -29,8 +30,8 @@ function Timer(props) {
   const [timerState, setTimerState] = useState(STATE_INIT);
 
   // current interval
-  const [duration, setDuration] = useState(10000);  // duration (ms)
-  const [remaining, setRemaining] = useState(duration);    // duration (ms)
+  const [duration, setDuration] = useState(DEFAULT_DURATION);  // duration (ms)
+  const [remaining, setRemaining] = useState(DEFAULT_DURATION);    // duration (ms)
   const [start, setStart] = useState(0);            // time (ms)
   const [end, setEnd] = useState(0);                // time (ms)
   
@@ -42,7 +43,10 @@ function Timer(props) {
 
   // event handlers
   function onDurationChange(time) {
-    const ms = totalMS(time);
+    let ms = DEFAULT_DURATION;
+    if (time) {
+      ms = totalMS(time);
+    }
     setDuration(ms);
     setRemaining(ms);
   }
@@ -86,7 +90,7 @@ function Timer(props) {
   }
 
   function startTimer() {
-    setDelay(INTERVAL);
+    setDelay(UPDATE_INTERVAL);
   }
 
   function stopTimer() {
@@ -116,7 +120,6 @@ function Timer(props) {
     ? Math.floor(remaining / duration * 100)
     : 0;
   const durationMoment = moment(duration).utc();
-  console.log('duration:', duration);
 
   return (
     <div>  
@@ -124,7 +127,7 @@ function Timer(props) {
         <Col span={24}>
           {/* defaultValue={moment('00:05:00', 'HH:mm:ss')} */}
           <TimePicker
-            defaultValue={durationMoment}
+            value={durationMoment}
             onChange={(time) => onDurationChange(time)}
             size="large"
             secondStep={10}
