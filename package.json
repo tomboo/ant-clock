@@ -1,8 +1,9 @@
 {
   "dependencies": {
-    "react-dom": "latest",
+    "antd": "latest",
+    "moment": "2.24.0",
     "react": "latest",
-    "antd": "latest"
+    "react-dom": "latest"
   },
   "keywords": [],
   "name": "ant-clock",
