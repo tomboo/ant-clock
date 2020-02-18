@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from "react";
-import { Button } from 'antd';
+import { Button, Table } from 'antd';
 import { useInterval } from "../utilities/hooks";
 import { clockify, toDate } from "../utilities";
 
@@ -8,7 +8,7 @@ const STATE_INIT = "initial";
 const STATE_RUN = "run";
 const STATE_PAUSE = "pause";
 
-const INTERVAL = 10; // update interval (10 ms)
+const UPDATE_INTERVAL = 10; // update interval (10 ms)
 
 // Stopwatch Component
 function Stopwatch(props) {
@@ -37,10 +37,6 @@ function Stopwatch(props) {
     stopTimer();
   }
 
-  function onLap() {
-    setLaps([...laps, elapsed]);
-  }
-
   function onReset() {
     setBase(0);
     setStart(0);
@@ -51,7 +47,7 @@ function Stopwatch(props) {
 
   function startTimer() {
     console.log("startTimer", toDate(Date.now()));
-    setDelay(INTERVAL);
+    setDelay(UPDATE_INTERVAL);
   }
 
   function stopTimer() {
@@ -74,22 +70,42 @@ function Stopwatch(props) {
     }
   }
 
-  const lapsList = laps.map((elapsedTime, index) => {
+  function onLap() {
+    let index = laps.length;
     let lapTime = 0;
     if (index === 0) {
-        lapTime = elapsedTime;
+        lapTime = elapsed;
     }
     else {
-        lapTime = elapsedTime - laps[index - 1];
+        lapTime = elapsed - laps[index - 1].elapsed;
     }
-    return (
-        <tr key={index}>
-            <td>{index}</td>
-            <td>{clockify(elapsedTime, 1)}</td>
-            <td>{clockify(lapTime, 1)}</td>
-        </tr>
-    );
-  });
+    setLaps([...laps, {
+      key: index,
+      index: index,
+      elapsed: elapsed,
+      lap: lapTime,
+    }]);
+  }
+
+  const columns = [
+    {
+      title: 'Index',
+      dataIndex: 'index',
+      key: 'index',
+    },
+    {
+      title: 'Elapsed',
+      dataIndex: 'elapsed',
+      key: 'elapsed',
+      render: elapsed => clockify(elapsed, 1),
+    },
+    {
+      title: 'Lap',
+      dataIndex: 'lap',
+      key: 'lap',
+      render: lap => clockify(lap, 1),
+    },
+  ];
 
   return (
     <div className="Stopwatch">
@@ -134,20 +150,12 @@ function Stopwatch(props) {
       </div>
 
       {/* Laps */}
-      <div className="StopwatchLaps">
-        <table>
-          <thead>
-            <tr>
-                <td>Index</td>
-                <td>Elapsed</td>
-                <td>Lap</td>
-            </tr>
-          </thead>
-          <tbody>
-            {lapsList}
-          </tbody>
-         </table>
-      </div>
+      <Table
+        columns={columns}
+        dataSource={laps}
+        bordered
+        size="small"
+      />
     </div>
   );
 };

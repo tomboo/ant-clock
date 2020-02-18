@@ -47,7 +47,7 @@ function App(props) {
       </Content>
 
       <Footer className="App-footer">
-        HaptX Inc. &copy; 2020
+        BooCo Inc. &copy; 2020
       </Footer>
     </Layout>
   );
