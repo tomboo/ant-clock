@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Timer from './pages'
+import Timer from './pages/timer'
 
 ReactDOM.render(
   <div>

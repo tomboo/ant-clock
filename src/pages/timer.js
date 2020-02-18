@@ -5,7 +5,7 @@ import { Button, Progress, TimePicker } from 'antd';
 import { useState } from "react";
 import { useInterval } from "../utilities/hooks";
 import moment from 'moment';
-import './index.css';
+import './timer.css';
 
 const STATE_INIT = "initial";
 const STATE_RUN = "run";
