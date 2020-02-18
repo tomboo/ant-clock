@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Timer from './pages/timer'
+import App from './pages/App'
 
 ReactDOM.render(
-  <div>
-    <Timer />
-  </div>,
+  <App />,
   document.getElementById('container'),
 );
           
